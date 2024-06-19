@@ -2,9 +2,11 @@ package main
 
 import (
 	"log"
+	"os"
 	"syscall"
 
 	"github.com/briandoesdev/caller-lookup/config"
+	"github.com/briandoesdev/caller-lookup/services/twilio"
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -25,6 +27,10 @@ func main() {
 		syscall.Exit(1)
 	}
 	log.Printf("Loaded config.")
+
+	// initialize services
+	twilio.InitClient(config.Twilio.AccountSid, config.Twilio.AuthToken)
+	twilio.TestClient(os.Getenv("TEST_PHONE_NUMBER"))
 
 	e := echo.New()
 	e.Use(middleware.RequestID())
