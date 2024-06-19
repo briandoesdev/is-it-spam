@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"os"
 	"syscall"
 
 	"github.com/briandoesdev/caller-lookup/config"
@@ -29,8 +28,7 @@ func main() {
 	log.Printf("Loaded config.")
 
 	// initialize services
-	twilio.InitClient(config.Twilio.AccountSid, config.Twilio.AuthToken)
-	twilio.TestClient(os.Getenv("TEST_PHONE_NUMBER"))
+	twilio.InitService(config.Twilio.AccountSid, config.Twilio.AuthToken)
 
 	e := echo.New()
 	e.Use(middleware.RequestID())
