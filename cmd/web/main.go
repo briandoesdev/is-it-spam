@@ -19,6 +19,7 @@ func main() {
 		log.Fatal("error loading .env file: ", err)
 		syscall.Exit(1)
 	}
+	log.Printf("Loaded env variables.")
 
 	// load config
 	config, err := config.NewConfig()
@@ -29,14 +30,14 @@ func main() {
 	log.Printf("Loaded config.")
 
 	// initialize services
-	twilio.InitService(config.Twilio.AccountSid, config.Twilio.AuthToken)
-	openai.InitService(config.OpenAI.ApiKey, config.OpenAI.Model)
-	log.Printf(openai.GenerateCompletions("My name is Brian. Repeat it back to me."))
+	twilio.InitService(config.Twilio)
+	openai.InitService(config.OpenAI)
+	log.Printf("Loaded services.")
 
 	e := echo.New()
 	e.Use(middleware.RequestID())
 	e.Use(middleware.Recover())
 	e.Use(middleware.Logger())
 
-	e.Logger.Fatal(e.Start(config.Server.Host + ":" + config.Server.Port))
+	//e.Logger.Fatal(e.Start(config.Server.Host + ":" + config.Server.Port))
 }

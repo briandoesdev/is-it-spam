@@ -1,13 +1,14 @@
 package twilio
 
 import (
-	"encoding/base64"
 	"errors"
 	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/briandoesdev/caller-lookup/config"
 )
 
 var (
@@ -24,17 +25,15 @@ var (
 )
 
 type TwilioService struct {
-	accountSid  string
-	authToken   string
-	EncodedAuth string
+	accountSid string
+	authToken  string
 }
 
-func InitService(accountSid, authToken string) {
+func InitService(c config.Twilio) {
 	log.Printf("Initializing Twilio service.")
 
-	Service.accountSid = accountSid
-	Service.authToken = authToken
-	Service.EncodedAuth = base64.StdEncoding.EncodeToString([]byte(accountSid + ":" + authToken))
+	Service.accountSid = c.AccountSid
+	Service.authToken = c.AuthToken
 
 	httpTransport = &http.Transport{
 		MaxIdleConns:      10,
@@ -70,7 +69,7 @@ func Lookup(number string) (string, error) {
 		return "", err
 	}
 
-	req.Header.Add("Authorization", "Basic "+Service.EncodedAuth)
+	req.SetBasicAuth(Service.accountSid, Service.authToken)
 
 	r, err := httpClient.Do(req)
 	if err != nil {

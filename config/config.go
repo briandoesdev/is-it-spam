@@ -9,14 +9,20 @@ type Config struct {
 		Port string `envconfig:"SERVER_PORT"`
 		Host string `envconfig:"SERVER_HOST"`
 	}
-	OpenAI struct {
-		ApiKey string `envconfig:"OPENAI_API_KEY"`
-		Model  string `envconfig:"OPENAI_MODEL"`
-	}
-	Twilio struct {
-		AccountSid string `envconfig:"TWILIO_ACCOUNT_SID"`
-		AuthToken  string `envconfig:"TWILIO_AUTH_TOKEN"`
-	}
+	OpenAI OpenAI
+	Twilio Twilio
+}
+
+type OpenAI struct {
+	ApiKey         string `envconfig:"OPENAI_API_KEY"`
+	Model          string `envconfig:"OPENAI_MODEL"`
+	OrganizationID string `envconfig:"OPENAI_ORGANIZATION_ID"`
+	ProjectID      string `envconfig:"OPENAI_PROJECT_ID"`
+}
+
+type Twilio struct {
+	AccountSid string `envconfig:"TWILIO_ACCOUNT_SID"`
+	AuthToken  string `envconfig:"TWILIO_AUTH_TOKEN"`
 }
 
 func NewConfig() (*Config, error) {

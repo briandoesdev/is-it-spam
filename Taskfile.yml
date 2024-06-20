@@ -3,4 +3,5 @@ version: '3'
 tasks:
   web:
     cmds:
+      - clear
       - go run cmd/web/main.go
