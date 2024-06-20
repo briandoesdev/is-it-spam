@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"syscall"
 
 	"github.com/briandoesdev/caller-lookup/config"
 	"github.com/briandoesdev/caller-lookup/services/openai"
@@ -17,7 +16,6 @@ func main() {
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("error loading .env file: ", err)
-		syscall.Exit(1)
 	}
 	log.Printf("Loaded env variables.")
 
@@ -25,7 +23,6 @@ func main() {
 	config, err := config.NewConfig()
 	if err != nil {
 		log.Fatal("error loading config: ", err)
-		syscall.Exit(1)
 	}
 	log.Printf("Loaded config.")
 
