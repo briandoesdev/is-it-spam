@@ -5,6 +5,7 @@ import (
 	"syscall"
 
 	"github.com/briandoesdev/caller-lookup/config"
+	"github.com/briandoesdev/caller-lookup/services/openai"
 	"github.com/briandoesdev/caller-lookup/services/twilio"
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
@@ -29,6 +30,8 @@ func main() {
 
 	// initialize services
 	twilio.InitService(config.Twilio.AccountSid, config.Twilio.AuthToken)
+	openai.InitService(config.OpenAI.ApiKey, config.OpenAI.Model)
+	log.Printf(openai.GenerateCompletions("My name is Brian. Repeat it back to me."))
 
 	e := echo.New()
 	e.Use(middleware.RequestID())

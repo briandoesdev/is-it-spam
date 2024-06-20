@@ -1,6 +1,6 @@
 version: '3'
 
 tasks:
-  run:
+  web:
     cmds:
       - go run cmd/web/main.go
