@@ -1,8 +1,6 @@
 package lookup
 
 import (
-	"fmt"
-
 	"github.com/briandoesdev/caller-lookup/routes"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -53,9 +51,7 @@ func getNumberSummary(c echo.Context) error {
 	switch f {
 	case "api":
 		return c.JSON(200, &Data{PhoneNumber: number, Summary: sum})
-	case "htmx":
-		return c.HTML(200, fmt.Sprintf("<p id=\"summary\" name=\"summary\">%s</p>", sum))
 	default:
-		return c.Render(200, "main.html", map[string]interface{}{"sum": sum})
+		return c.Render(200, "home.html", map[string]interface{}{"sum": sum})
 	}
 }
