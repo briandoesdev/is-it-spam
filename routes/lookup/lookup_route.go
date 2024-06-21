@@ -29,6 +29,7 @@ func Route(e *echo.Echo) {
 
 func getNumberSummary(c echo.Context) error {
 	var sum string
+	f := c.Request().Header.Get("X-Response-Format")
 	number := c.FormValue("number")
 
 	if number == "" {
@@ -38,16 +39,25 @@ func getNumberSummary(c echo.Context) error {
 	// twilio service lookup
 	t, err := twilio.Lookup(number)
 	if err != nil {
-		return c.JSON(500, &routes.ErrorPayload{Message: err.Error()})
+		switch f {
+		case "api":
+			return c.JSON(500, &routes.ErrorPayload{Message: err.Error()})
+		default:
+			return c.Render(200, "home.html", map[string]interface{}{"sum": err.Error()})
+		}
 	}
 
 	// openai service summarization
 	sum, err = ai.GenerateCompletions(t)
 	if err != nil {
-		return c.JSON(500, &routes.ErrorPayload{Message: err.Error()})
+		switch f {
+		case "api":
+			return c.JSON(500, &routes.ErrorPayload{Message: err.Error()})
+		default:
+			return c.Render(200, "home.html", map[string]interface{}{"sum": err.Error()})
+		}
 	}
 
-	f := c.Request().Header.Get("X-Response-Format")
 	switch f {
 	case "api":
 		return c.JSON(200, &Data{PhoneNumber: number, Summary: sum})

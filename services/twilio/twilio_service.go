@@ -16,7 +16,7 @@ var (
 	twilioBaseUrl           = "https://lookups.twilio.com/v1/PhoneNumbers/"
 	twilioAddOns            = "?AddOns=trestle_reverse_phone"
 	errUninitializedService = errors.New("openai service not initialized")
-	errLookupFailed         = errors.New("lookup failed")
+	errLookupFailed         = errors.New("error looking up number, verify the number and try again")
 )
 
 var (
