@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Is It Spam?</title>
+    <script src="https://unpkg.com/htmx.org@2.0.0"></script>
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+  </head>
+
+  <body>
+    <h1>Is It Spam?</h1>
+    <p>Enter a phone number to see if it's spam or not.</p>
+
+    <input type="text" id="number" name="number" placeholder="Enter a phone number">
+    <button type="button" 
+            hx-post="/lookup" 
+            hx-include="[name='number']" 
+            hx-target="#summary" 
+            hx-swap="outerHTML"
+    >Lookup</button>
+
+    <p id="summary" name="summary">{{ .sum }}</p>
+  </body>
+</html>

@@ -1,7 +1,13 @@
 package main
 
 import (
+	"io"
 	"log"
+	"text/template"
+
+	r "github.com/briandoesdev/caller-lookup/routes"
+	home "github.com/briandoesdev/caller-lookup/routes/home"
+	lookup "github.com/briandoesdev/caller-lookup/routes/lookup"
 
 	"github.com/briandoesdev/caller-lookup/config"
 	"github.com/briandoesdev/caller-lookup/services/openai"
@@ -10,6 +16,14 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
+
+type Template struct {
+	templates *template.Template
+}
+
+func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
+	return t.templates.ExecuteTemplate(w, name, data)
+}
 
 func main() {
 	// load env variables
@@ -31,10 +45,21 @@ func main() {
 	openai.InitService(config.OpenAI)
 	log.Printf("Loaded services.")
 
+	// create server
 	e := echo.New()
+	e.Renderer = &Template{
+		templates: template.Must(template.ParseGlob("public/views/*.html")),
+	}
+
+	// register app level middleware
 	e.Use(middleware.RequestID())
 	e.Use(middleware.Recover())
 	e.Use(middleware.Logger())
 
-	//e.Logger.Fatal(e.Start(config.Server.Host + ":" + config.Server.Port))
+	// register routes
+	builder := r.NewRouteBuilder(e)
+	builder.Register(home.Route)
+	builder.Register(lookup.Route)
+
+	e.Logger.Fatal(e.Start(config.Server.Host + ":" + config.Server.Port))
 }

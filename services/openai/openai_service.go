@@ -8,6 +8,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/briandoesdev/caller-lookup/config"
@@ -139,7 +140,7 @@ func GenerateCompletions(prompt string) (string, error) {
 		return "", err
 	}
 
-	return result.Choices[0].Message.Content, nil
+	return strings.Trim(result.Choices[0].Message.Content, "\""), nil
 }
 
 func checkInit() error {
