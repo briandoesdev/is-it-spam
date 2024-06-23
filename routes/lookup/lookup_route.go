@@ -43,9 +43,9 @@ func getNumberSummary(c echo.Context) error {
 		case "api":
 			return c.JSON(500, &routes.ErrorPayload{Message: err.Error()})
 		case "sms":
-			return c.String(200, err.Error())
+			return c.String(500, err.Error())
 		default:
-			return c.Render(200, "home.html", map[string]interface{}{"sum": err.Error()})
+			return c.Render(500, "home.html", map[string]interface{}{"sum": err.Error()})
 		}
 	}
 
@@ -56,9 +56,9 @@ func getNumberSummary(c echo.Context) error {
 		case "api":
 			return c.JSON(500, &routes.ErrorPayload{Message: err.Error()})
 		case "sms":
-			return c.String(200, sum)
+			return c.String(500, sum)
 		default:
-			return c.Render(200, "home.html", map[string]interface{}{"sum": err.Error()})
+			return c.Render(500, "home.html", map[string]interface{}{"sum": err.Error()})
 		}
 	}
 
