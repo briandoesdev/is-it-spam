@@ -29,7 +29,7 @@ func Route(e *echo.Echo) {
 
 func getNumberSummary(c echo.Context) error {
 	var sum string
-	f := c.Request().Header.Get("X-Response-Format")
+	f := c.Request().Header.Get("X-Custom-Format")
 	number := c.FormValue("number")
 
 	if number == "" {
@@ -42,6 +42,8 @@ func getNumberSummary(c echo.Context) error {
 		switch f {
 		case "api":
 			return c.JSON(500, &routes.ErrorPayload{Message: err.Error()})
+		case "sms":
+			return c.String(200, err.Error())
 		default:
 			return c.Render(200, "home.html", map[string]interface{}{"sum": err.Error()})
 		}
@@ -53,6 +55,8 @@ func getNumberSummary(c echo.Context) error {
 		switch f {
 		case "api":
 			return c.JSON(500, &routes.ErrorPayload{Message: err.Error()})
+		case "sms":
+			return c.String(200, sum)
 		default:
 			return c.Render(200, "home.html", map[string]interface{}{"sum": err.Error()})
 		}
@@ -61,6 +65,8 @@ func getNumberSummary(c echo.Context) error {
 	switch f {
 	case "api":
 		return c.JSON(200, &Data{PhoneNumber: number, Summary: sum})
+	case "sms":
+		return c.String(200, sum)
 	default:
 		return c.Render(200, "home.html", map[string]interface{}{"sum": sum})
 	}
